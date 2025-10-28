@@ -1,0 +1,115 @@
+---
+title: "reading_data_from_web"
+output: github_document
+date: "2025-10-09"
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(httr)
+```
+
+import NSDUH data from the web
+
+```{r}
+url = "http://samhda.s3-us-gov-west-1.amazonaws.com/s3fs-public/field-uploads/2k15StateFiles/NSDUHsaeShortTermCHG2015.htm"
+
+drug_use_html = read_html(url)
+```
+
+
+this is an "easy case
+note:'slice' function allows you to take the first row out
+
+```{r}
+drug_use_html %>% 
+  html_table() %>% 
+  first() %>% 
+  slice(-1)
+```
+
+sligthly harder case
+
+```{r}
+url = "https://www.imdb.com/list/ls070150896/"
+
+sw_html = 
+  read_html(url)
+```
+
+now pull out elements of html that I care about
+
+```{r}
+sw_html %>% 
+  html_elements(".ipc-title-link-wrapper .ipc-title__text--reduced") %>% 
+  html_text()
+
+title_vec = 
+ sw_html %>% 
+  html_elements(".ipc-title__text--reduced") %>% 
+  html_text() 
+
+metascore_vec = 
+  sw_html %>% 
+  html_elements(".metacritic-score-box") %>% 
+  html_text()
+
+runtime_vec = 
+    sw_html %>% 
+  html_elements(".dli-title-metadata-item:nth-child(2)") %>% 
+  html_text()
+
+sw_df = 
+  tibble(
+    title = title_vec,
+    metascore = metascore_vec, 
+    runtime = runtime_vec
+  )
+```
+
+## APIs
+get data using an API
+
+get the NYC water consumption data set
+
+```{r}
+nyc_water_df = 
+  GET("https://data.cityofnewyork.us/resource/ia2d-e54m.csv") %>% 
+  content("parsed")
+
+nyc_water_df %>% 
+  ggplot(aes(x = year, y = nyc_consumption_million_gallons_per_day)) +
+  geom_point()
+```
+access BRFSS
+
+```{r, eval = FALSE}
+brfss_df = 
+  GET("https://chronicdata.cdc.gov/api/v3/views/acme-vg9e/query.csv",
+      query = list("app_Token" = "")) %>% 
+  content("parsed")
+```
+
+look at Pokemon data
+
+```{r}
+poke = 
+  GET("http://pokeapi.co/api/v2/pokemon/1") %>% 
+  content()
+
+poke[[2]]
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+

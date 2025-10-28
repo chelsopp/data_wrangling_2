@@ -1,0 +1,96 @@
+---
+title: "strings and factors"
+output: github_document
+date: "2025-10-14"
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+```
+
+## Mostly use string vectors
+note`str_detect` is case sensitive
+```{r}
+string_vec = c("my", "name", "is", "chelsey")
+
+str_detect(string_vec, "chelsey")
+str_detect(string_vec, "e")
+
+str_replace(string_vec, "chelsey", "Chelsey")
+str_replace(string_vec, "e", "E")
+
+str_replace(string_vec, "e", "")
+str_remove(string_vec, "e")
+```
+
+note: `str_detect(string_vec, "i think$ ")` aka looking for "i think" at the end of sentences
+note: `str_detect(string_vec, "^i think")` aka looking for "i think" at beginning of sentences
+```{r}
+string_vec = c(
+  "i think we all rule for participating",
+  "i think i have been caught",
+  "i think this will be quite fun actually",
+  "it will be fun, i think"
+  )
+
+str_detect(string_vec, "i think")
+str_detect(string_vec, "^i think")
+str_detect(string_vec, "i think$ ")
+
+str_remove(string_vec, "i think$")
+
+```
+
+`[Pp]` looking for anything w/in brackets
+```{r}
+string_vec = c(
+  "Time for a Pumpkin Spice Latte!",
+  "went to the #pumpkinpatch last weekend",
+  "Pumpkin Pie is obviously the best pie",
+  "SMASHING PUMPKINS -- LIVE IN CONCERT!!"
+  )
+
+
+str_detect(string_vec, "[Pp]umpkin")
+
+```
+
+
+Let's get a bit more complicated
+```{r}
+string_vec = c(
+  '7th inning stretch',
+  '1st half soon to begin. Texas won the toss.',
+  'she is 5 feet 4 inches tall',
+  '3AM - cant sleep :('
+  )
+
+str_detect(string_vec, "[0-9][a-zA-z]")
+```
+
+note: `.` represents that anything can be in that place
+note: `"7\\.1" aka looking for "7.1" becasue `\\` let's you know you are looking for a special character
+```{r}
+string_vec = c(
+  'Its 7:11 in the evening',
+  'want to go to 7-11?',
+  'my flight is AA711',
+  'NetBios: scanning ip 203.167.114.66'
+  )
+
+ str_detect(string_vec, "7\\.1") 
+```
+
+## Factors
+
+```{r}
+vec_sex = factor(c("male", "male", "female", "female"))
+vec_sex
+```
+
+```{r}
+
+```
+
+
